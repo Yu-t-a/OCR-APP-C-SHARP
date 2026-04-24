@@ -60,15 +60,33 @@ User Input → Console App → OCR Engine → API Client → OpenTyphoon API →
 - ✅ รับข้อมูลรูปภาพจากผู้ใช้ผ่าน Command Line
 - ✅ เชื่อมต่อกับ Typhoon OCR API
 - ✅ แสดงผลลัพธ์การ OCR พร้อมค่าความมั่นใจ (Confidence Score)
-- ✅ รองรับทั้งไฟล์ในโฟลเดอร์ images และ full path
-- ✅ มีโหมด demo สำหรับทดสอบการทำงาน
 
 ## การติดตั้งและใช้งาน
 
 ### ข้อกำหนดเบื้องต้น (Prerequisites)
-- .NET 6.0 หรือสูงกว่า
-- API Key จาก Typhoon OCR
-- Windows/Linux/macOS
+
+#### ซอฟต์แวร์ที่ต้องติดตั้ง
+- **.NET 10.0 SDK** หรือสูงกว่า
+  - ดาวน์โหลด: https://dotnet.microsoft.com/download
+  - ตรวจสอบเวอร์ชัน: `dotnet --version`
+- **Git** - สำหรับ clone repository
+  - ดาวน์โหลด: https://git-scm.com/downloads
+- **PowerShell 7+** (สำหรับ Windows)
+  - ดาวน์โหลด: https://github.com/PowerShell/PowerShell/releases
+
+#### ข้อกำหนดเพิ่มเติม
+- **API Key จาก Typhoon OCR** - สำหรับเชื่อมต่อกับ API
+- **การเชื่อมต่ออินเทอร์เน็ต** - สำหรับเชื่อมต่อกับ Typhoon OCR API
+- **ระบบปฏิบัติการที่รองรับ:**
+  - Windows 10/11
+  - Linux (Ubuntu 20.04+, Debian 11+, etc.)
+  - macOS 11+ (Big Sur) ขึ้นไป
+
+#### Dependencies ที่ติดตั้งอัตโนมัติ
+โปรเจคจะติดตั้ง NuGet packages ต่อไปนี้อัตโนมัติเมื่อรัน `dotnet restore`:
+- **Microsoft.Extensions.Http** (v10.0.5) - สำหรับ HTTP Client
+- **SixLabors.ImageSharp** (v3.1.12) - สำหรับประมวลผลรูปภาพ
+- **Tesseract** (v5.2.0) - สำหรับ OCR Engine (สำรอง)
 
 ### การติดตั้ง
 
@@ -160,9 +178,12 @@ Press any key to exit (auto-exit in 5 seconds)...
 
 ## เทคโนโลยีที่ใช้
 
-- **.NET 6.0+** - Framework หลักสำหรับการพัฒนา
+- **.NET 10.0** - Framework หลักสำหรับการพัฒนา
 - **C#** - ภาษาหลักในการพัฒนา
 - **Typhoon OCR API** - บริการ OCR หลัก
+- **Microsoft.Extensions.Http** - HTTP Client สำหรับเชื่อมต่อ API
+- **SixLabors.ImageSharp** - ไลบรารีประมวลผลรูปภาพ
+- **Tesseract** - OCR Engine (สำรอง)
 - **ASP.NET Core** - สำหรับ Web Application (แผนอนาคต)
 - **Entity Framework Core** - สำหรับ Database Operations (แผนอนาคต)
 
