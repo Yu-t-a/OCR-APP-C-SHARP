@@ -1,237 +1,197 @@
-# Typhoon OCR - ระบบ OCR 
+# Typhoon OCR - OCR System
 
-## ภาพรวมโปรเจค
+![Project Views](https://img.shields.io/badge/Project_Views-1-blue?style=flat-square)
+![GitHub Stars](https://img.shields.io/github/stars/Yu-t-a/Typhoon-OCR-C-Sharp?style=flat-square)
+![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
 
-Typhoon OCR เป็นระบบ Optical Character Recognition (OCR) ที่พัฒนาด้วยภาษา C# โดยใช้ Typhoon OCR API เป็นหลักในการแปลงข้อมูลจากรูปภาพเป็นข้อความ ระบบถูกออกแบบมาเพื่อให้สามารถแปลงข้อมูลจากเอกสารกระดาษและรูปภาพต่างๆ ให้กลายเป็นข้อมูลดิจิทัลที่จัดเก็บใน Database เพื่อนำไปใช้งานต่อได้
+## 📖 Project Overview
 
-### วัตถุประสงค์หลัก
-- แปลงข้อความจากรูปภาพและเอกสารกระดาษให้เป็นข้อมูลดิจิทัล
-- จัดการข้อมูลที่ได้จากการ OCR ในรูปแบบที่มีโครงสร้าง
-- สนับสนุนการทำงานผ่านหลายช่องทาง (CLI และ Web UI)
-- ให้บริการ OCR ที่มีความแม่นยำสูงด้วย Typhoon OCR Engine
+**Typhoon OCR** is an Optical Character Recognition (OCR) system developed in C# utilizing the **Typhoon OCR API** to extract digital text from images and paper documents. The system is designed with a Clean Architecture, enabling scalability for future Web UI integrations and structured database storage.
 
-## สถาปัตยกรรมระบบ
+### 🎯 Main Objectives
+- Extract and convert text from images and documents into structured digital data.
+- Provide highly accurate OCR services using the Typhoon OCR Engine.
+- Support multiple platforms (starting with a CLI and expanding to a Web UI).
 
-ระบบถูกออกแบบตามหลักการ Layered Architecture เพื่อความยืดหยุ่นและบำรุงรักษาง่าย
+### ✨ Current Capabilities
+- Accept image inputs from users via the Command Line Interface (CLI).
+- Connect to and process images through the Typhoon OCR API.
+- Display OCR extraction results along with Confidence Scores.
 
-### โครงสร้างโปรเจค
+---
 
-```
+## 🛠 Tech Stack & Dependencies
+
+- **Framework:** .NET 10.0 (C#)
+- **Architecture:** Clean Architecture (Layered Architecture)
+- **OCR Engine:**
+  - **Primary:** Typhoon OCR API
+  - **Fallback:** Tesseract (v5.2.0)
+- **Key Libraries:**
+  - `Microsoft.Extensions.Http` (v10.0.5) - For HTTP Client operations
+  - `SixLabors.ImageSharp` (v3.1.12) - For image processing
+  - `System.Text.Json` - For JSON serialization and parsing
+
+---
+
+## 🏗 Architecture & Project Structure
+
+The system is strictly divided into layers for high maintainability:
+`Typhoon.Console` (or `Web`) → `Typhoon.Core`
+
+```text
 Typhoon OCR/
-├── Typhoon.Core/              # Logic Layer - ชั้นตรรกะการทำงานหลัก
-│   ├── Interfaces/            # ส่วนกำหนด Interface สำหรับการเชื่อมต่อ
-│   │   └── IOcrEngine.cs      # Interface สำหรับ OCR Engine
-│   ├── Models/                # โมเดลข้อมูลที่ใช้ในระบบ
-│   │   ├── ProcessedImage.cs  # โมเดลสำหรับข้อมูลรูปภาพที่ประมวลผล
-│   │   └── ExtractionResult.cs # โมเดลสำหรับผลลัพธ์การ OCR
-│   ├── Services/              # บริการต่างๆ ของระบบ
-│   │   ├── TyphoonCloudOcrEngine.cs # บริการ OCR Engine หลัก
-│   │   └── TyphoonOcrApiClient.cs   # API Client สำหรับเชื่อมต่อกับ Typhoon
-│   ├── Enums/                 # ค่าคงที่และ Enum
-│   │   └── OcrLanguage.cs     # รายการภาษาที่รองรับ
-│   └── Typhoon.Core.csproj    # ไฟล์โปรเจคสำหรับ Core Layer
+├── Typhoon.Core/              # 🧠 Logic Layer - Core business logic and OCR Engine
+│   ├── Interfaces/            # Contracts for DI (e.g., IOcrEngine.cs)
+│   ├── Models/                # Data structures (e.g., ProcessedImage.cs, ExtractionResult.cs)
+│   ├── Services/              # Core services (e.g., TyphoonCloudOcrEngine, TyphoonOcrApiClient)
+│   └── Enums/                 # Constants and enums (e.g., OcrLanguage)
 │
-├── Typhoon.Console/           # Presentation Layer - CLI Application
-│   ├── Program.cs             # โปรแกรมหลักสำหรับ CLI
-│   └── Typhoon.Console.csproj # ไฟล์โปรเจคสำหรับ Console App
+├── Typhoon.Console/           # 💻 Presentation Layer - CLI Application
+│   └── Program.cs             # CLI entry point
 │
-└── Typhoon.Web/               # Web UI Layer (แผนพัฒนาในอนาคต)
-    ├── Pages/                 # หน้าเว็บต่างๆ
-    ├── Properties/            # คุณสมบัติของ Web Application
-    ├── appsettings.json       # การตั้งค่าแอปพลิเคชัน
-    ├── appsettings.Development.json # การตั้งค่าสำหรับ Development
-    └── Typhoon.Web.csproj     # ไฟล์โปรเจคสำหรับ Web App
+└── Typhoon.Web/               # 🌐 Web UI Layer (Future roadmap)
+    └── Pages/                 # Web pages for uploading and displaying results
 ```
 
-### การพึ่งพาระหว่าง Layers
-```
-Typhoon.Console → Typhoon.Core
-Typhoon.Web → Typhoon.Core
-```
+**Data Flow:**  
+`User Input` → `Console/Web App` → `OCR Engine` → `API Client` → `OpenTyphoon API` → `Database` (Future)
 
-### การไหลของข้อมูล (Data Flow)
-```
-User Input → Console App → OCR Engine → API Client → OpenTyphoon API → Database
-```
+---
 
-## ความสามารถของระบบปัจจุบัน
+## 🚀 Installation & Setup
 
-### 1. CLI Application (Typhoon.Console)
-- ✅ รับข้อมูลรูปภาพจากผู้ใช้ผ่าน Command Line
-- ✅ เชื่อมต่อกับ Typhoon OCR API
-- ✅ แสดงผลลัพธ์การ OCR พร้อมค่าความมั่นใจ (Confidence Score)
+### 1. Prerequisites
+- **.NET 10.0 SDK** or higher (`dotnet --version`)
+- **Git** (for cloning the repository)
+- **API Key** from Typhoon OCR
 
-## การติดตั้งและใช้งาน
+### 2. Project Installation
 
-### ข้อกำหนดเบื้องต้น (Prerequisites)
-
-#### ซอฟต์แวร์ที่ต้องติดตั้ง
-- **.NET 10.0 SDK** หรือสูงกว่า
-  - ดาวน์โหลด: https://dotnet.microsoft.com/download
-  - ตรวจสอบเวอร์ชัน: `dotnet --version`
-- **Git** - สำหรับ clone repository
-  - ดาวน์โหลด: https://git-scm.com/downloads
-- **PowerShell 7+** (สำหรับ Windows)
-  - ดาวน์โหลด: https://github.com/PowerShell/PowerShell/releases
-
-#### ข้อกำหนดเพิ่มเติม
-- **API Key จาก Typhoon OCR** - สำหรับเชื่อมต่อกับ API
-- **การเชื่อมต่ออินเทอร์เน็ต** - สำหรับเชื่อมต่อกับ Typhoon OCR API
-- **ระบบปฏิบัติการที่รองรับ:**
-  - Windows 10/11
-  - Linux (Ubuntu 20.04+, Debian 11+, etc.)
-  - macOS 11+ (Big Sur) ขึ้นไป
-
-#### Dependencies ที่ติดตั้งอัตโนมัติ
-โปรเจคจะติดตั้ง NuGet packages ต่อไปนี้อัตโนมัติเมื่อรัน `dotnet restore`:
-- **Microsoft.Extensions.Http** (v10.0.5) - สำหรับ HTTP Client
-- **SixLabors.ImageSharp** (v3.1.12) - สำหรับประมวลผลรูปภาพ
-- **Tesseract** (v5.2.0) - สำหรับ OCR Engine (สำรอง)
-
-### การติดตั้ง
-
-1. **Clone Repository**
+**Method 1: Clone the Repository**
 ```bash
 git clone <repository-url>
 cd OCR-APP-C-SHARP
+dotnet restore
 ```
 
-2. **ตั้งค่า API Key (ครั้งเดียว)**
-```powershell
-.\setup-env.ps1 -ApiKey "sk-your-key" -Mode "production"
-```
+**Method 2: Create a New Project from Scratch (Quick Start)**
+<details>
+<summary>Click to view project creation commands</summary>
 
-3. **Build Project**
 ```bash
-dotnet build
+dotnet new sln -n Typhoon-OCR
+dotnet new classlib -n Typhoon.Core --force
+dotnet new webapp -n Typhoon.Web --force
+dotnet sln add Typhoon.Web/Typhoon.Web.csproj Typhoon.Core/Typhoon.Core.csproj
+dotnet add Typhoon.Web/Typhoon.Web.csproj reference Typhoon.Core/Typhoon.Core.csproj
+dotnet add Typhoon.Core/Typhoon.Core.csproj package Tesseract
+dotnet add Typhoon.Core/Typhoon.Core.csproj package SixLabors.ImageSharp
+dotnet add Typhoon.Core/Typhoon.Core.csproj package System.Text.Json
+dotnet add Typhoon.Core/Typhoon.Core.csproj package Microsoft.Extensions.Http
+```
+</details>
+
+### 3. Configuration
+Set up the API Key for the connection. For a complete guide on how to configure your API key securely across different operating systems, please read the **[API Key Setup Guide](API_KEY_SETUP.md)**.
+
+```bash
+# Windows (PowerShell)
+.\setup-env.ps1 -ApiKey "sk-your-key" -Mode "production"
+
+# macOS / Linux (Terminal)
+chmod +x setup-env.sh
+./setup-env.sh --api-key "sk-your-key" --mode "production"
 ```
 
-### การใช้งาน
+Or configure it in the `appsettings.json` file (for the future Web App structure):
+```json
+{
+  "OcrSettings": {
+    "TesseractDataPath": "./tessdata",
+    "DefaultLanguage": "tha+eng",
+    "MaxFileSize": 10485760
+  }
+}
+```
 
-#### 1. ผ่าน Command Line Interface (CLI)
+---
 
-**เริ่มต้นโปรแกรม:**
+## 💻 Usage Guide (CLI)
+
+1. Navigate to the CLI folder and run the application:
 ```bash
 cd Typhoon.Console
 dotnet run
 ```
-
-**ตัวเลือกการใช้งาน:**
-- กด `Enter` → ใช้รูปภามตัวอย่าง (demo mode)
-- ใส่ชื่อไฟล์ (เช่น `38080.jpg`) → ใช้ไฟล์จากโฟลเดอร์ `images`
-- ใส่ full path (เช่น `D:\path\image.jpg`) → ใช้ไฟล์จากที่อื่นในระบบ
-
-**ตัวอย่างการทำงาน:**
-```
-=== Typhoon OCR ===
-✅ Using existing API Key from environment
-✅ API Key loaded
-
-Enter image filename or path (or press Enter for demo): 38080.jpg
-
-🔄 Processing image: 38080.jpg
-=== OCR Result ===
-🔒 Confidence: 95.0%
-
-📄 Extracted Text:
-----------------------------------------
-[ข้อความที่ OCR ได้จากรูปภาพ]
-----------------------------------------
-Press any key to exit (auto-exit in 5 seconds)...
-```
-**รูปตัวอย่างการทำงาน:**
+2. Follow the on-screen prompts:
+   - **Press `Enter`** to test with a demo image.
+   - **Enter the filename** (e.g., `image.jpg`) to use an image from the `images` folder.
+   - **Enter the full path** (e.g., `D:\path\image.jpg`) to specify a specific image location.
 
 <div style="display: flex; gap: 20px; flex-wrap: wrap;">
   <div style="text-align: center;">
     <img src="images/1197876_0.jpg" alt="OCR Sample Image" width="400">
-    <p><em>รูปภาพตัวอย่างที่ใช้ทดสอบ OCR</em></p>
+    <p><em>Sample Image</em></p>
   </div>
   <div style="text-align: center;">
     <img src="snapshot/Screenshot%202026-03-31%20114024.png" alt="CLI Application" width="400">
-    <p><em>หน้าจอการทำงานของ CLI Application</em></p>
+    <p><em>CLI Application Execution</em></p>
   </div>
 </div>
 
-## แผนการพัฒนาในอนาคต
+---
 
-### Phase 1: Core System Enhancement
-- [ ] เพิ่มการรองรับภาษาต่างๆ (Multi-language support)
-- [ ] ปรับปรุงความแม่นยำในการ OCR
-- [ ] เพิ่มการจัดการข้อผิดพลาด (Error Handling)
+## 🛣 Future Development Plan (Roadmap)
 
-### Phase 2: Database Integration
-- [ ] ออกแบบ Database Schema สำหรับเก็บข้อมูล OCR
-- [ ] พัฒนา Data Access Layer
-- [ ] บันทึกประวัติการ OCR และผลลัพธ์
+- **Phase 1: Core OCR Library** (Status: Core structure completed)
+  - Integrate Tesseract as an offline fallback system.
+  - Add multi-language support and comprehensive error handling.
+- **Phase 2: Web Interface**
+  - Create a UI for uploading images and validating files.
+- **Phase 3: Background Worker & Database**
+  - Implement a queue system using `BackgroundService` for OCR processing.
+  - Connect a Database (SQLite for Dev / PostgreSQL for Production) to store OCR history.
+- **Phase 4: Advanced Features**
+  - Implement Batch Processing (handling multiple files simultaneously).
+  - Add Excel/CSV export capabilities and expose a RESTful API.
 
-### Phase 3: Web Application
-- [ ] พัฒนา Web UI ด้วย ASP.NET Core
-- [ ] สร้างหน้า Upload รูปภาพ
-- [ ] แสดงผลลัพธ์แบบ Real-time
-- [ ] จัดการข้อมูลผ่าน Web Interface
+---
 
-### Phase 4: Advanced Features
-- [ ] Batch Processing (ประมวลผลหลายไฟล์พร้อมกัน)
-- [ ] Export ข้อมูลเป็น Excel/CSV
-- [ ] การจัดการผู้ใช้งาน (User Management)
-- [ ] RESTful API สำหรับการเชื่อมต่อกับระบบอื่น
+## ❓ Troubleshooting
 
-## เทคโนโลยีที่ใช้
+| Issue | Cause & Solution |
+|---|---|
+| `Invalid API Key` | Verify if the API Key is correct. Try running the `setup-env.ps1` script again. |
+| `File not found` | The image does not exist. Ensure the file is in the `images` folder or provide the correct full path. |
+| `Connection timeout` | Network issue. Check your internet connection or the Typhoon OCR server status. |
 
-- **.NET 10.0** - Framework หลักสำหรับการพัฒนา
-- **C#** - ภาษาหลักในการพัฒนา
-- **Typhoon OCR API** - บริการ OCR หลัก
-- **Microsoft.Extensions.Http** - HTTP Client สำหรับเชื่อมต่อ API
-- **SixLabors.ImageSharp** - ไลบรารีประมวลผลรูปภาพ
-- **Tesseract** - OCR Engine (สำรอง)
-- **ASP.NET Core** - สำหรับ Web Application (แผนอนาคต)
-- **Entity Framework Core** - สำหรับ Database Operations (แผนอนาคต)
+*Development Note: The system is planned to include a file cleanup mechanism for the temp folder.*
 
-## โครงสร้างไฟล์สำคัญ
+---
 
-### IOcrEngine.cs
-กำหนด Interface หลักสำหรับ OCR Engine ทุกตัวที่จะใช้ในระบบ
+## 📚 Appendix: `dotnet new` Command Guide (Reference)
 
-### ProcessedImage.cs
-โมเดลสำหรับเก็บข้อมูลรูปภาพที่ผ่านการประมวลผล
-- Path ของไฟล์
-- ขนาดไฟล์
-- วันที่ประมวลผล
-- สถานะการประมวลผล
+<details>
+<summary>Click to view commonly used commands</summary>
 
-### ExtractionResult.cs
-โมเดลสำหรับเก็บผลลัพธ์การ OCR
-- ข้อความที่แปลงได้
-- ค่าความมั่นใจ (Confidence Score)
-- เวลาที่ใช้ในการประมวลผล
-- ภาษาที่ตรวจพบ
+The `dotnet new` command is used to create project templates in .NET via the CLI:
 
-## การแก้ไขปัญหาที่พบบ่อย (Troubleshooting)
+| Command | Description |
+|---|---|
+| `dotnet new sln -n <Name>` | Create a Solution file |
+| `dotnet new console -n <Name>` | Create a Console App project |
+| `dotnet new classlib -n <Name>` | Create a Class Library project |
+| `dotnet new webapi -n <Name>` | Create a Web API project |
+| `dotnet sln add <Project.csproj>`| Add a project to the Solution |
 
-### 1. API Key ไม่ถูกต้อง
-```
-❌ Error: Invalid API Key
-```
-**วิธีแก้ไข:** ตรวจสอบ API Key และรัน `setup-env.ps1` ใหม่
+View all templates: `dotnet new list` or learn more using `dotnet new <template> --help`
+</details>
 
-### 2. ไม่พบไฟล์รูปภาพ
-```
-❌ Error: File not found
-```
-**วิธีแก้ไข:** ตรวจสอบว่าไฟล์อยู่ในโฟลเดอร์ `images` หรือระบุ full path ที่ถูกต้อง
+---
 
-### 3. เครือข่ายมีปัญหา
-```
-❌ Error: Connection timeout
-```
-**วิธีแก้ไข:** ตรวจสอบการเชื่อมต่ออินเทอร์เน็ตและสถานะของ Typhoon OCR API
+## 📞 Developer & License
 
-## ผู้พัฒนาและการติดต่อ
-
-สำหรับข้อมูลเพิ่มเติมหรือการสนับสนุน สามารถติดต่อได้ที่:
-- GitHub: [Repository Link]
-- Email: [Contact Email]
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
+- **Developer:** [Your Name / GitHub Profile]
+- **Contact:** [Your Email]
+- **License:** This project is licensed under the [MIT License](LICENSE).
