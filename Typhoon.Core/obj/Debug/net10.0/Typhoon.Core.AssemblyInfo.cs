@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Typhoon.Core")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+64dd28a6b4a757321f33611421d8bf234cfab026")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dabbdffe89976c13276e9b44a0aa8a33334cb46e")]
 [assembly: System.Reflection.AssemblyProductAttribute("Typhoon.Core")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Typhoon.Core")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

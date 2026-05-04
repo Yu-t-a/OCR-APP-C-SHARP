@@ -190,8 +190,3 @@ View all templates: `dotnet new list` or learn more using `dotnet new <template>
 
 ---
 
-## 📞 Developer & License
-
-- **Developer:** [Your Name / GitHub Profile]
-- **Contact:** [Your Email]
-- **License:** This project is licensed under the [MIT License](LICENSE).

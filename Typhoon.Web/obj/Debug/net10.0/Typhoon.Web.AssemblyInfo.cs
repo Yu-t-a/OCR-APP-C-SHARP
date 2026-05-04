@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Typhoon.Web")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f486750cc7e536c13fb4c86ed7092d020223fb7f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dabbdffe89976c13276e9b44a0aa8a33334cb46e")]
 [assembly: System.Reflection.AssemblyProductAttribute("Typhoon.Web")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Typhoon.Web")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

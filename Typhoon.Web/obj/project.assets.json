@@ -2,7 +2,7 @@
   "version": 3,
   "targets": {
     "net10.0": {
-      "SixLabors.ImageSharp/3.1.5": {
+      "SixLabors.ImageSharp/3.1.12": {
         "type": "package",
         "compile": {
           "lib/net6.0/SixLabors.ImageSharp.dll": {
@@ -38,8 +38,9 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v10.0",
         "dependencies": {
-          "SixLabors.ImageSharp": "3.1.5",
-          "Tesseract": "5.2.0"
+          "SixLabors.ImageSharp": "3.1.12",
+          "Tesseract": "5.2.0",
+          "Typhoon.Shared": "1.0.0"
         },
         "compile": {
           "bin/placeholder/Typhoon.Core.dll": {}
@@ -47,14 +48,24 @@
         "runtime": {
           "bin/placeholder/Typhoon.Core.dll": {}
         }
+      },
+      "Typhoon.Shared/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "compile": {
+          "bin/placeholder/Typhoon.Shared.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Typhoon.Shared.dll": {}
+        }
       }
     }
   },
   "libraries": {
-    "SixLabors.ImageSharp/3.1.5": {
-      "sha512": "lNtlq7dSI/QEbYey+A0xn48z5w4XHSffF8222cC4F4YwTXfEImuiBavQcWjr49LThT/pRmtWJRcqA/PlL+eJ6g==",
+    "SixLabors.ImageSharp/3.1.12": {
+      "sha512": "iAg6zifihXEFS/t7fiHhZBGAdCp3FavsF4i2ZIDp0JfeYeDVzvmlbY1CNhhIKimaIzrzSi5M/NBFcWvZT2rB/A==",
       "type": "package",
-      "path": "sixlabors.imagesharp/3.1.5",
+      "path": "sixlabors.imagesharp/3.1.12",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -63,7 +74,7 @@
         "lib/net6.0/SixLabors.ImageSharp.dll",
         "lib/net6.0/SixLabors.ImageSharp.xml",
         "sixlabors.imagesharp.128.png",
-        "sixlabors.imagesharp.3.1.5.nupkg.sha512",
+        "sixlabors.imagesharp.3.1.12.nupkg.sha512",
         "sixlabors.imagesharp.nuspec"
       ]
     },
@@ -91,48 +102,49 @@
       "type": "project",
       "path": "../Typhoon.Core/Typhoon.Core.csproj",
       "msbuildProject": "../Typhoon.Core/Typhoon.Core.csproj"
+    },
+    "Typhoon.Shared/1.0.0": {
+      "type": "project",
+      "path": "../Typhoon.Shared/Typhoon.Shared.csproj",
+      "msbuildProject": "../Typhoon.Shared/Typhoon.Shared.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net10.0": [
-      "Typhoon.Core >= 1.0.0"
+      "Typhoon.Core >= 1.0.0",
+      "Typhoon.Shared >= 1.0.0"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Gz\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "/Users/yu/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Typhoon-OCR-C-Sharp\\Typhoon.Web\\Typhoon.Web.csproj",
+      "projectUniqueName": "/Users/yu/dev/OCR-APP-C-SHARP/Typhoon.Web/Typhoon.Web.csproj",
       "projectName": "Typhoon.Web",
-      "projectPath": "D:\\Typhoon-OCR-C-Sharp\\Typhoon.Web\\Typhoon.Web.csproj",
-      "packagesPath": "C:\\Users\\Gz\\.nuget\\packages\\",
-      "outputPath": "D:\\Typhoon-OCR-C-Sharp\\Typhoon.Web\\obj\\",
+      "projectPath": "/Users/yu/dev/OCR-APP-C-SHARP/Typhoon.Web/Typhoon.Web.csproj",
+      "packagesPath": "/Users/yu/.nuget/packages/",
+      "outputPath": "/Users/yu/dev/OCR-APP-C-SHARP/Typhoon.Web/obj/",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\Gz\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "/Users/yu/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net10.0": {
           "targetAlias": "net10.0",
           "projectReferences": {
-            "D:\\Typhoon-OCR-C-Sharp\\Typhoon.Core\\Typhoon.Core.csproj": {
-              "projectPath": "D:\\Typhoon-OCR-C-Sharp\\Typhoon.Core\\Typhoon.Core.csproj"
+            "/Users/yu/dev/OCR-APP-C-SHARP/Typhoon.Core/Typhoon.Core.csproj": {
+              "projectPath": "/Users/yu/dev/OCR-APP-C-SHARP/Typhoon.Core/Typhoon.Core.csproj"
+            },
+            "/Users/yu/dev/OCR-APP-C-SHARP/Typhoon.Shared/Typhoon.Shared.csproj": {
+              "projectPath": "/Users/yu/dev/OCR-APP-C-SHARP/Typhoon.Shared/Typhoon.Shared.csproj"
             }
           }
         }
@@ -171,7 +183,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.201/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.201/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.AspNetCore": "(,10.0.32767]",
           "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",
@@ -588,27 +600,5 @@
         }
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1903",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'SixLabors.ImageSharp' 3.1.5 has a known high severity vulnerability, https://github.com/advisories/GHSA-2cmq-823j-5qj8",
-      "libraryId": "SixLabors.ImageSharp",
-      "targetGraphs": [
-        "net10.0"
-      ]
-    },
-    {
-      "code": "NU1902",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'SixLabors.ImageSharp' 3.1.5 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-rxmq-m78w-7wmc",
-      "libraryId": "SixLabors.ImageSharp",
-      "targetGraphs": [
-        "net10.0"
-      ]
-    }
-  ]
+  }
 }

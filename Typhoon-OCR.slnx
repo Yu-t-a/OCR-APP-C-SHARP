@@ -1,5 +1,7 @@
 <Solution>
+  <Project Path="Typhoon.Api/Typhoon.Api.csproj" />
   <Project Path="Typhoon.Console/Typhoon.Console.csproj" />
   <Project Path="Typhoon.Core/Typhoon.Core.csproj" />
+  <Project Path="Typhoon.Shared/Typhoon.Shared.csproj" />
   <Project Path="Typhoon.Web/Typhoon.Web.csproj" />
 </Solution>

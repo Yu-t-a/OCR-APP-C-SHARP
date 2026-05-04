@@ -1,36 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "4zwM1qJH6h8=",
+  "dgSpecHash": "LJfWk2nXI1U=",
   "success": true,
-  "projectFilePath": "D:\\Typhoon-OCR-C-Sharp\\Typhoon.Web\\Typhoon.Web.csproj",
+  "projectFilePath": "/Users/yu/dev/OCR-APP-C-SHARP/Typhoon.Web/Typhoon.Web.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Gz\\.nuget\\packages\\sixlabors.imagesharp\\3.1.5\\sixlabors.imagesharp.3.1.5.nupkg.sha512",
-    "C:\\Users\\Gz\\.nuget\\packages\\tesseract\\5.2.0\\tesseract.5.2.0.nupkg.sha512"
+    "/Users/yu/.nuget/packages/sixlabors.imagesharp/3.1.12/sixlabors.imagesharp.3.1.12.nupkg.sha512",
+    "/Users/yu/.nuget/packages/tesseract/5.2.0/tesseract.5.2.0.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1903",
-      "level": "Warning",
-      "message": "Package 'SixLabors.ImageSharp' 3.1.5 has a known high severity vulnerability, https://github.com/advisories/GHSA-2cmq-823j-5qj8",
-      "projectPath": "D:\\Typhoon-OCR-C-Sharp\\Typhoon.Web\\Typhoon.Web.csproj",
-      "warningLevel": 1,
-      "filePath": "D:\\Typhoon-OCR-C-Sharp\\Typhoon.Web\\Typhoon.Web.csproj",
-      "libraryId": "SixLabors.ImageSharp",
-      "targetGraphs": [
-        "net10.0"
-      ]
-    },
-    {
-      "code": "NU1902",
-      "level": "Warning",
-      "message": "Package 'SixLabors.ImageSharp' 3.1.5 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-rxmq-m78w-7wmc",
-      "projectPath": "D:\\Typhoon-OCR-C-Sharp\\Typhoon.Web\\Typhoon.Web.csproj",
-      "warningLevel": 1,
-      "filePath": "D:\\Typhoon-OCR-C-Sharp\\Typhoon.Web\\Typhoon.Web.csproj",
-      "libraryId": "SixLabors.ImageSharp",
-      "targetGraphs": [
-        "net10.0"
-      ]
-    }
-  ]
+  "logs": []
 }

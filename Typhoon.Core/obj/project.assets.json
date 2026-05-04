@@ -291,6 +291,16 @@
         "build": {
           "build/Tesseract.targets": {}
         }
+      },
+      "Typhoon.Shared/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "compile": {
+          "bin/placeholder/Typhoon.Shared.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Typhoon.Shared.dll": {}
+        }
       }
     }
   },
@@ -782,48 +792,50 @@
         "x86/leptonica-1.82.0.dll",
         "x86/tesseract50.dll"
       ]
+    },
+    "Typhoon.Shared/1.0.0": {
+      "type": "project",
+      "path": "../Typhoon.Shared/Typhoon.Shared.csproj",
+      "msbuildProject": "../Typhoon.Shared/Typhoon.Shared.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net10.0": [
       "Microsoft.Extensions.Http >= 10.0.5",
       "SixLabors.ImageSharp >= 3.1.12",
-      "Tesseract >= 5.2.0"
+      "Tesseract >= 5.2.0",
+      "Typhoon.Shared >= 1.0.0"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Gz\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "/Users/yu/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\OCR-APP-C-SHARP\\Typhoon.Core\\Typhoon.Core.csproj",
+      "projectUniqueName": "/Users/yu/dev/OCR-APP-C-SHARP/Typhoon.Core/Typhoon.Core.csproj",
       "projectName": "Typhoon.Core",
-      "projectPath": "D:\\OCR-APP-C-SHARP\\Typhoon.Core\\Typhoon.Core.csproj",
-      "packagesPath": "C:\\Users\\Gz\\.nuget\\packages\\",
-      "outputPath": "D:\\OCR-APP-C-SHARP\\Typhoon.Core\\obj\\",
+      "projectPath": "/Users/yu/dev/OCR-APP-C-SHARP/Typhoon.Core/Typhoon.Core.csproj",
+      "packagesPath": "/Users/yu/.nuget/packages/",
+      "outputPath": "/Users/yu/dev/OCR-APP-C-SHARP/Typhoon.Core/obj/",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\Gz\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "/Users/yu/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net10.0": {
           "targetAlias": "net10.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "/Users/yu/dev/OCR-APP-C-SHARP/Typhoon.Shared/Typhoon.Shared.csproj": {
+              "projectPath": "/Users/yu/dev/OCR-APP-C-SHARP/Typhoon.Shared/Typhoon.Shared.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
@@ -871,7 +883,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.201/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.201/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.CSharp": "(,4.7.32767]",
           "Microsoft.VisualBasic": "(,10.4.32767]",

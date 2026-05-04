@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Typhoon.Core\Typhoon.Core.csproj" />
+    <ProjectReference Include="..\Typhoon.Shared\Typhoon.Shared.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

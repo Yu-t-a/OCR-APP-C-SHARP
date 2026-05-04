@@ -8,17 +8,18 @@
     ".NETCoreApp,Version=v10.0": {
       "Typhoon.Web/1.0.0": {
         "dependencies": {
-          "Typhoon.Core": "1.0.0"
+          "Typhoon.Core": "1.0.0",
+          "Typhoon.Shared": "1.0.0"
         },
         "runtime": {
           "Typhoon.Web.dll": {}
         }
       },
-      "SixLabors.ImageSharp/3.1.5": {
+      "SixLabors.ImageSharp/3.1.12": {
         "runtime": {
           "lib/net6.0/SixLabors.ImageSharp.dll": {
             "assemblyVersion": "3.0.0.0",
-            "fileVersion": "3.1.5.0"
+            "fileVersion": "3.1.12.0"
           }
         }
       },
@@ -32,11 +33,20 @@
       },
       "Typhoon.Core/1.0.0": {
         "dependencies": {
-          "SixLabors.ImageSharp": "3.1.5",
-          "Tesseract": "5.2.0"
+          "SixLabors.ImageSharp": "3.1.12",
+          "Tesseract": "5.2.0",
+          "Typhoon.Shared": "1.0.0"
         },
         "runtime": {
           "Typhoon.Core.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Typhoon.Shared/1.0.0": {
+        "runtime": {
+          "Typhoon.Shared.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -50,12 +60,12 @@
       "serviceable": false,
       "sha512": ""
     },
-    "SixLabors.ImageSharp/3.1.5": {
+    "SixLabors.ImageSharp/3.1.12": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-lNtlq7dSI/QEbYey+A0xn48z5w4XHSffF8222cC4F4YwTXfEImuiBavQcWjr49LThT/pRmtWJRcqA/PlL+eJ6g==",
-      "path": "sixlabors.imagesharp/3.1.5",
-      "hashPath": "sixlabors.imagesharp.3.1.5.nupkg.sha512"
+      "sha512": "sha512-iAg6zifihXEFS/t7fiHhZBGAdCp3FavsF4i2ZIDp0JfeYeDVzvmlbY1CNhhIKimaIzrzSi5M/NBFcWvZT2rB/A==",
+      "path": "sixlabors.imagesharp/3.1.12",
+      "hashPath": "sixlabors.imagesharp.3.1.12.nupkg.sha512"
     },
     "Tesseract/5.2.0": {
       "type": "package",
@@ -65,6 +75,11 @@
       "hashPath": "tesseract.5.2.0.nupkg.sha512"
     },
     "Typhoon.Core/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Typhoon.Shared/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
