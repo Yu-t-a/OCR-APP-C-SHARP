@@ -55,7 +55,100 @@ Typhoon OCR/
 ```
 
 **Data Flow:**  
-`User Input` → `Console/Web App` → `OCR Engine` → `API Client` → `OpenTyphoon API` → `Database` (Future)
+`User Input` → `Console/Web App` → `OCR Engine` → `API Client` → `OpenTyphoon API` → `Database`
+
+---
+
+## 🗄 Database Schema
+
+The project uses **MSSQL Server 2022** running in Docker for data persistence.
+
+### SQL Files
+
+| File | Purpose | Tables |
+|---|---|---|
+| `db/init.sql` | OCR business logic schema | DocumentTypes, OcrJobs, OcrDocuments, OcrDocumentFields |
+| `db/init_auth_api.sql` | Full authentication & API management schema | 20 tables (Users, Roles, Permissions, ApiKeys, AuditLog, 2FA, etc.) |
+| `db/init_auth_minimal.sql` | Minimal schema for small projects | 6 tables (Users, Roles, UserRoles, ApiKeys, PasswordResetTokens, AuditLog) |
+| `db/seed_test_data.sql` | Test data for development | Seed data for all auth tables |
+
+### Authentication & Authorization Tables (init_auth_api.sql)
+
+**User Management:**
+- `Users` - User accounts with email verification, lockout, password reset
+- `UserRegistrations` - Pending registrations awaiting email verification
+- `RefreshTokens` - JWT refresh tokens for token rotation
+- `PasswordResetTokens` - Password recovery tokens
+- `Sessions` - Active user sessions
+
+**Role-Based Access Control (RBAC):**
+- `Roles` - Role definitions (Admin, User, ReadOnly, ApiUser)
+- `Permissions` - Granular permissions (app.read, user.write, apikey.delete, etc.)
+- `UserRoles` - User-role assignments
+- `RolePermissions` - Role-permission mappings
+
+**API Management:**
+- `ApiKeys` - API keys with rate limiting (hour/day/month)
+- `ApiUsage` - API usage tracking for analytics
+- `IpWhitelist` - IP whitelist per API key
+- `IpBlacklist` - Global IP blacklist
+
+**Audit & Logging:**
+- `AuditLog` - System event audit trail
+- `EmailVerificationLogs` - Email sending logs
+- `UserActivityLog` - User activity tracking
+
+**User Preferences:**
+- `UserSettings` - Key-value user settings
+- `NotificationSettings` - Per-event notification preferences
+
+**Two-Factor Authentication (2FA):**
+- `TwoFactorSecrets` - TOTP secrets
+- `BackupCodes` - 2FA backup codes for recovery
+
+### Stored Procedures
+
+- `sp_CheckRateLimit` - Check API key rate limits
+- `sp_LogApiUsage` - Log API usage for analytics
+- `sp_GetUserPermissions` - Get all user permissions
+- `sp_CheckUserPermission` - Check specific permission
+- `sp_ValidateApiKey` - Validate API key
+- `sp_LogAudit` - Log audit events
+- `sp_UpdateFailedLogin` - Track failed login attempts (lock after 5)
+- `sp_CreateDefaultNotificationSettings` - Create default notification preferences
+
+### Docker Database Setup
+
+```bash
+# Start database with auto-initialization
+docker-compose up -d
+
+# Database: TyphoonOcrDB
+# Host: localhost:1433
+# User: sa
+# Password: From .env.MSSQL_SA_PASSWORD (default: YourStrong@Passw0rd)
+```
+
+**Services:**
+- `sqlserver` - MSSQL Server 2022 container
+- `db-init` - Runs SQL files in correct order after SQL Server is ready
+- `adminer` - Web-based database manager (http://localhost:8080)
+
+### Adminer (Web Database Manager)
+
+Access via **http://localhost:8080**
+
+| Field | Value |
+|---|---|
+| System | MS SQL |
+| Server | sqlserver |
+| Username | sa |
+| Password | YourStrong@Passw0rd |
+| Database | TyphoonOcrDB |
+
+### Documentation
+
+For complete database schema documentation, see [`db/DATABASE_SCHEMA.md`](db/DATABASE_SCHEMA.md)
 
 ---
 
