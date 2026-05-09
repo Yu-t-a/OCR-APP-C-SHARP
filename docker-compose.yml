@@ -13,7 +13,6 @@ services:
       # - "${MSSQL_PORT:-1433}:1433"
     volumes:
       - sqlserver_data:/var/opt/mssql
-      - ./db:/docker-entrypoint-initdb.d:ro
     networks:
       - typhoon-network
     healthcheck:
@@ -22,6 +21,32 @@ services:
       timeout: 5s
       retries: 5
       start_period: 30s
+
+  db-init:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: typhoon-db-init
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    volumes:
+      - ./db:/scripts:ro
+    environment:
+      - MSSQL_SA_PASSWORD=${MSSQL_SA_PASSWORD:-YourStrong@Passw0rd}
+      - APP_ENV=${APP_ENV:-development}
+      - ACCEPT_EULA=Y
+    command: ["/bin/bash", "/scripts/init-db.sh"]
+    networks:
+      - typhoon-network
+
+  adminer:
+    image: adminer:latest
+    container_name: typhoon-adminer
+    ports:
+      - "0.0.0.0:8080:8080"
+    networks:
+      - typhoon-network
+    depends_on:
+      - sqlserver
 
 volumes:
   sqlserver_data:
