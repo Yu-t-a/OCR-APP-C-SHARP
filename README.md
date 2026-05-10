@@ -186,7 +186,9 @@ dotnet add Typhoon.Core/Typhoon.Core.csproj package Microsoft.Extensions.Http
 </details>
 
 ### 3. Configuration
-Set up the API Key for the connection. For a complete guide on how to configure your API key securely across different operating systems, please read the **[API Key Setup Guide](API_KEY_SETUP.md)**.
+
+#### 3.1 API Key Configuration
+Set up the API Key for the Typhoon OCR connection. For a complete guide on how to configure your API key securely across different operating systems, please read the **[API Key Setup Guide](API_KEY_SETUP.md)**.
 
 ```bash
 # Windows (PowerShell)
@@ -195,6 +197,73 @@ Set up the API Key for the connection. For a complete guide on how to configure 
 # macOS / Linux (Terminal)
 chmod +x setup-env.sh
 ./setup-env.sh --api-key "sk-your-key" --mode "production"
+```
+
+#### 3.2 Database Configuration
+The application requires MSSQL Server 2022 for data persistence. Database connection is configured via environment variables.
+
+**Using Docker (Recommended):**
+```bash
+# Start database with auto-initialization
+docker-compose up -d
+
+# Database will be initialized automatically with:
+# - init.sql (OCR tables)
+# - init_auth_api.sql (Auth/API tables)
+# - seed_test_data.sql (Test data - dev only)
+```
+
+**Environment Variables (.env file):**
+```bash
+# SQL Server Configuration
+DB_HOST=localhost
+DB_PORT=1433
+DB_NAME=TyphoonOcrDB
+DB_USER=sa
+DB_PASSWORD=YourStrong@Passw0rd
+```
+
+**Manual Database Setup:**
+If Docker is not used, manually configure the database connection in your environment:
+
+```bash
+# macOS / Linux
+export DB_HOST=localhost
+export DB_PORT=1433
+export DB_NAME=TyphoonOcrDB
+export DB_USER=sa
+export DB_PASSWORD=YourStrong@Passw0rd
+
+# Windows (PowerShell)
+$env:DB_HOST="localhost"
+$env:DB_PORT="1433"
+$env:DB_NAME="TyphoonOcrDB"
+$env:DB_USER="sa"
+$env:DB_PASSWORD="YourStrong@Passw0rd"
+```
+
+**Note:** If the database is unavailable, the application will still function but OCR results will not be saved.
+
+#### 3.3 Full Configuration File (.env.example)
+```bash
+# SQL Server Configuration
+ACCEPT_EULA=Y
+MSSQL_SA_PASSWORD=YourStrong@Passw0rd
+MSSQL_PID=Developer
+MSSQL_PORT=1433
+
+# Database Configuration
+DB_HOST=localhost
+DB_PORT=1433
+DB_NAME=TyphoonOcrDB
+DB_USER=sa
+DB_PASSWORD=YourStrong@Passw0rd
+
+# Docker Configuration
+COMPOSE_PROJECT_NAME=typhoon-ocr
+
+# OCR API Configuration
+TYPHOON_API_KEY=your_api_key_here
 ```
 
 Or configure it in the `appsettings.json` file (for the future Web App structure):
@@ -282,4 +351,7 @@ View all templates: `dotnet new list` or learn more using `dotnet new <template>
 </details>
 
 ---
+
+
+
 

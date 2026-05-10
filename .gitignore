@@ -48,12 +48,12 @@ bld/
 *.sqlite
 *.sqlite3
 
-ิิdb/init_api_login.sql
-db/seed_test_data.sql
-db/init_auth_minimal.sql
+# ิิdb/init_api_login.sql
+# db/seed_test_data.sql
+# db/init_auth_minimal.sql
 # db/DATABASE_SCHEMA.md
 db/run-init.ps1
-db/init-db.sh
+# db/init-db.sh
 
 # Environment variables
 .env

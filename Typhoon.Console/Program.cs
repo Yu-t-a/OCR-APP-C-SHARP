@@ -1,4 +1,6 @@
-﻿using Typhoon.Core.Services;
+﻿using Typhoon.Core.Data;
+using Typhoon.Core.Data.Repositories;
+using Typhoon.Core.Services;
 using Typhoon.Core.Models;
 using Typhoon.Core.Enums;
 
@@ -14,6 +16,21 @@ if (isDebugMode)
 
 Console.WriteLine("=== Typhoon OCR ===");
 Console.WriteLine();
+
+// Setup database connection
+IOcrRepository? ocrRepo = null;
+try
+{
+    var dbContext = OcrDbContextFactory.Create();
+    ocrRepo = new OcrRepository(dbContext);
+    if (isDebugMode)
+        Console.WriteLine("✅ Database connected");
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"⚠️ Database unavailable - results will NOT be saved ({ex.Message})");
+}
+
 
 // Get API key from environment or user input
 string apiKey = Environment.GetEnvironmentVariable("TYPHOON_API_KEY") ?? "";
@@ -44,6 +61,46 @@ else
 Console.WriteLine("✅ API Key loaded");
 Console.WriteLine();
 
+// Resolve images folder: works whether running from project root or Typhoon.Console/
+string imagesFolder = new[] { "images", "../images" }
+    .Select(p => Path.GetFullPath(p))
+    .FirstOrDefault(Directory.Exists) ?? Path.GetFullPath("images");
+
+// Fetch document types from database
+int? selectedDocumentTypeId = null;
+if (ocrRepo != null)
+{
+    try
+    {
+        var docTypes = await ocrRepo.GetDocumentTypesAsync();
+        if (docTypes.Count > 0)
+        {
+            Console.WriteLine("📋 Select Document Type:");
+            for (int i = 0; i < docTypes.Count; i++)
+            {
+                Console.WriteLine($"   {i + 1}. {docTypes[i].TypeName} ({docTypes[i].TypeCode})");
+            }
+            Console.Write("Enter number (default: 1): ");
+            var typeInput = Console.ReadLine();
+            if (int.TryParse(typeInput, out int typeIndex) && typeIndex >= 1 && typeIndex <= docTypes.Count)
+            {
+                selectedDocumentTypeId = docTypes[typeIndex - 1].Id;
+                Console.WriteLine($"✅ Selected: {docTypes[typeIndex - 1].TypeName}");
+            }
+            else
+            {
+                selectedDocumentTypeId = docTypes[0].Id;
+                Console.WriteLine($"✅ Default: {docTypes[0].TypeName}");
+            }
+            Console.WriteLine();
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"⚠️ Could not load document types: {ex.Message}");
+    }
+}
+
 // Test with a sample image path
 Console.Write("Enter image filename or path (or press Enter for demo): ");
 string input = Console.ReadLine() ?? string.Empty;
@@ -52,7 +109,7 @@ string imagePath;
 if (string.IsNullOrEmpty(input))
 {
     // Try to find a demo file in the images folder
-    var imageFiles = Directory.GetFiles("../images", "*.jpg");
+    var imageFiles = Directory.Exists(imagesFolder) ? Directory.GetFiles(imagesFolder, "*.jpg") : [];
     if (imageFiles.Length > 0)
     {
         imagePath = imageFiles[0];
@@ -61,7 +118,7 @@ if (string.IsNullOrEmpty(input))
     else
     {
         Console.WriteLine("📝 Demo mode - You need to provide an image filename or path");
-        Console.WriteLine("Example: 38080.jpg or D:\\path\\to\\image.jpg");
+        Console.WriteLine("Example: 38080.jpg or /path/to/image.jpg");
         Console.WriteLine();
         return;
     }
@@ -84,21 +141,21 @@ else
     else
     {
         // Try to find in images folder
-        var imagesPath = Path.Combine("../images", input);
-        if (File.Exists(imagesPath))
+        var candidate = Path.Combine(imagesFolder, input);
+        if (File.Exists(candidate))
         {
-            imagePath = imagesPath;
+            imagePath = candidate;
             Console.WriteLine($"✅ Found in images folder: {Path.GetFileName(imagePath)}");
         }
         else
         {
             Console.WriteLine($"❌ File not found: {input}");
             Console.WriteLine("💡 Available options:");
-            Console.WriteLine("   1. Filename only: 38080.jpg (searches in images folder)");
-            Console.WriteLine("   2. Full path: D:\\Typhoon-OCR-C-Sharp\\images\\38080.jpg");
+            Console.WriteLine("   1. Filename only: image.jpg (searches in images folder)");
+            Console.WriteLine("   2. Full path: /path/to/image.jpg");
             
             // Show available files in images folder
-            var availableFiles = Directory.GetFiles("../images", "*.jpg");
+            var availableFiles = Directory.Exists(imagesFolder) ? Directory.GetFiles(imagesFolder, "*.jpg") : [];
             if (availableFiles.Length > 0)
             {
                 Console.WriteLine("\n📁 Available files in images folder:");
@@ -114,9 +171,19 @@ else
 
 if (File.Exists(imagePath))
 {
+    Guid? jobId = null;
     try
     {
         Console.WriteLine($"🔄 Processing image: {Path.GetFileName(imagePath)}");
+
+        // Create job in database
+        if (ocrRepo != null)
+        {
+            var job = await ocrRepo.CreateJobAsync(Path.GetFileName(imagePath), imagePath, selectedDocumentTypeId);
+            jobId = job.Id;
+            if (isDebugMode)
+                Console.WriteLine($"🔍 DB: Created job {jobId}");
+        }
         
         // Create OCR engine
         var ocrEngine = new TyphoonCloudOcrEngine(apiKey);
@@ -161,6 +228,15 @@ if (File.Exists(imagePath))
             Console.WriteLine("----------------------------------------");
             Console.WriteLine(result.RawText);
             Console.WriteLine("----------------------------------------");
+
+            // Save result to database
+            if (ocrRepo != null && jobId.HasValue)
+            {
+                var docTypeId = selectedDocumentTypeId ?? 1;
+                await ocrRepo.SaveResultAsync(jobId.Value, result.RawText, null, result.MeanConfidence, docTypeId);
+                await ocrRepo.UpdateJobStatusAsync(jobId.Value, "Done");
+                Console.WriteLine($"💾 Result saved to database (Job: {jobId})");
+            }
             
             if (isDebugMode)
             {
@@ -172,6 +248,9 @@ if (File.Exists(imagePath))
         }
         else
         {
+            if (ocrRepo != null && jobId.HasValue)
+                await ocrRepo.UpdateJobStatusAsync(jobId.Value, "Failed");
+
             if (isDebugMode)
                 Console.WriteLine("🔍 DEBUG: No text extracted - Check API response");
             else
@@ -181,6 +260,17 @@ if (File.Exists(imagePath))
     catch (Exception ex)
     {
         Console.WriteLine($"❌ Error processing image: {ex.Message}");
+        var inner = ex.InnerException;
+        while (inner != null)
+        {
+            Console.WriteLine($"   ↳ {inner.Message}");
+            inner = inner.InnerException;
+        }
+        if (isDebugMode)
+            Console.WriteLine(ex.StackTrace);
+
+        if (ocrRepo != null && jobId.HasValue)
+            await ocrRepo.UpdateJobStatusAsync(jobId.Value, "Failed");
     }
 }
 else
