@@ -2,106 +2,259 @@
 @model Typhoon.Web.Pages.UploadModel
 @{
     ViewData["Title"] = "Upload Image";
+    Layout = null;
 }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Typhoon OCR — Upload</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .drop-zone.dragover { border-color: #10b981; background: #ecfdf5; }
+        .sidebar-link.active { background: #10b981; color: white; }
+        .sidebar-link.active svg { color: white; }
+    </style>
+</head>
+<body class="bg-[#f0faf6] min-h-screen">
 
-<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-3xl mx-auto">
-        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-            <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-6">
-                <h1 class="text-3xl font-bold text-white">Upload Image for OCR Processing</h1>
-                <p class="text-blue-100 mt-2">Upload your image to extract text using OCR</p>
+<div class="flex min-h-screen">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white shadow-sm flex flex-col py-8 px-5 fixed h-full z-10">
+        <!-- Logo -->
+        <div class="flex items-center gap-3 mb-10 px-1">
+            <div class="w-9 h-9 rounded-xl bg-emerald-500 flex items-center justify-center">
+                <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
             </div>
-            
-            <div class="px-8 py-8">
-                <form method="post" enctype="multipart/form-data" class="space-y-6">
-                    <div>
-                        <label for="file" class="block text-sm font-medium text-gray-700 mb-2">Select Image File</label>
-                        <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-blue-500 transition-colors">
-                            <div class="space-y-1 text-center">
-                                <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                                <div class="flex text-sm text-gray-600">
-                                    <label for="UploadedFile" class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
-                                        <span>Upload a file</span>
-                                        <input id="UploadedFile" name="UploadedFile" type="file" class="sr-only" accept="image/*" required>
-                                    </label>
-                                    <p class="pl-1">or drag and drop</p>
-                                </div>
-                                <p class="text-xs text-gray-500">JPG, PNG, GIF, BMP up to 10MB</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
-                    {
-                        <div class="rounded-md bg-red-50 p-4">
-                            <div class="flex">
-                                <div class="flex-shrink-0">
-                                    <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-                                    </svg>
-                                </div>
-                                <div class="ml-3">
-                                    <p class="text-sm font-medium text-red-800">@Model.ErrorMessage</p>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                    
-                    @if (!string.IsNullOrEmpty(Model.SuccessMessage))
-                    {
-                        <div class="rounded-md bg-green-50 p-4">
-                            <div class="flex">
-                                <div class="flex-shrink-0">
-                                    <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                                    </svg>
-                                </div>
-                                <div class="ml-3">
-                                    <p class="text-sm font-medium text-green-800">@Model.SuccessMessage</p>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                    
-                    <div>
-                        <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all">
-                            Upload Image
-                        </button>
-                    </div>
-                </form>
+            <span class="text-lg font-bold text-gray-800">Typhoon OCR</span>
+        </div>
+
+        <!-- Nav -->
+        <nav class="flex-1 space-y-1">
+            <a href="/Index" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-500 hover:bg-gray-50 transition-all">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                Dashboard
+            </a>
+            <a href="/Upload" class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                Upload Image
+            </a>
+            <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-500 hover:bg-gray-50 transition-all">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                Job History
+            </a>
+            <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-500 hover:bg-gray-50 transition-all">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                Settings
+            </a>
+        </nav>
+
+        <!-- Promo Card -->
+        <div class="mt-6 bg-emerald-50 rounded-2xl p-4">
+            <p class="text-xs font-semibold text-emerald-700 mb-1">Pro Tip</p>
+            <p class="text-xs text-emerald-600 leading-relaxed">Upload high-resolution images for better OCR accuracy.</p>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="ml-64 flex-1 p-8">
+
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800">Upload Image <span class="text-2xl">📄</span></h1>
+                <p class="text-sm text-gray-400 mt-1">Extract text from your images using AI-powered OCR</p>
+            </div>
+            <div class="flex items-center gap-3 bg-white rounded-2xl px-4 py-2 shadow-sm">
+                <div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 font-semibold text-sm">T</div>
+                <div>
+                    <p class="text-sm font-semibold text-gray-700">Typhoon User</p>
+                    <p class="text-xs text-gray-400">OCR Processor</p>
+                </div>
             </div>
         </div>
-        
+
+        <!-- Stats Row -->
+        <div class="grid grid-cols-3 gap-5 mb-8">
+            <div class="bg-white rounded-2xl p-5 shadow-sm">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400 font-medium">Total Uploads</p>
+                        <p class="text-xl font-bold text-gray-800">@(Model.UploadedFiles?.Count ?? 0)</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-2xl p-5 shadow-sm">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400 font-medium">Supported Formats</p>
+                        <p class="text-xl font-bold text-gray-800">5</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-2xl p-5 shadow-sm">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400 font-medium">Max File Size</p>
+                        <p class="text-xl font-bold text-gray-800">10 MB</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="grid grid-cols-5 gap-6">
+
+            <!-- Upload Form -->
+            <div class="col-span-3 bg-white rounded-2xl shadow-sm p-7">
+                <h2 class="text-base font-semibold text-gray-700 mb-5">Select Image File</h2>
+
+                <form method="post" enctype="multipart/form-data" id="uploadForm">
+
+                    <!-- Drop Zone -->
+                    <div id="dropZone" class="drop-zone border-2 border-dashed border-gray-200 rounded-2xl p-10 text-center cursor-pointer hover:border-emerald-400 hover:bg-emerald-50 transition-all mb-5">
+                        <div class="flex flex-col items-center gap-3">
+                            <div class="w-16 h-16 rounded-2xl bg-emerald-100 flex items-center justify-center">
+                                <svg class="w-8 h-8 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-sm font-semibold text-gray-600">
+                                    <label for="UploadedFile" class="text-emerald-600 cursor-pointer hover:underline">Browse file</label>
+                                    <input id="UploadedFile" name="UploadedFile" type="file" class="hidden" accept="image/*" required>
+                                    <span class="font-normal text-gray-400"> or drag & drop here</span>
+                                </p>
+                                <p id="fileNameDisplay" class="text-xs text-gray-400 mt-1">JPG, PNG, GIF, BMP — up to 10MB</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Alerts -->
+                    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                    {
+                        <div class="flex items-center gap-3 bg-red-50 border border-red-100 rounded-xl p-4 mb-4">
+                            <svg class="w-5 h-5 text-red-400 shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
+                            <p class="text-sm text-red-700 font-medium">@Model.ErrorMessage</p>
+                        </div>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+                    {
+                        <div class="flex items-center gap-3 bg-emerald-50 border border-emerald-100 rounded-xl p-4 mb-4">
+                            <svg class="w-5 h-5 text-emerald-500 shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                            <p class="text-sm text-emerald-700 font-medium">@Model.SuccessMessage</p>
+                        </div>
+                    }
+
+                    <button type="submit" class="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-semibold transition-all shadow-sm shadow-emerald-200">
+                        Process Image with OCR
+                    </button>
+                </form>
+            </div>
+
+            <!-- Right Column -->
+            <div class="col-span-2 flex flex-col gap-5">
+
+                <!-- Tips Card -->
+                <div class="bg-[#1a2e44] rounded-2xl p-6 text-white flex flex-col justify-between min-h-[160px]">
+                    <div>
+                        <p class="text-xs font-semibold text-emerald-400 mb-2 uppercase tracking-wide">Best Results</p>
+                        <p class="text-lg font-bold leading-snug">Get Better OCR<br/>Accuracy</p>
+                    </div>
+                    <ul class="mt-4 space-y-1">
+                        <li class="flex items-center gap-2 text-xs text-gray-300"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span>Use high-resolution images</li>
+                        <li class="flex items-center gap-2 text-xs text-gray-300"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span>Ensure good lighting</li>
+                        <li class="flex items-center gap-2 text-xs text-gray-300"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span>Avoid blurry or skewed images</li>
+                    </ul>
+                </div>
+
+                <!-- Supported Formats -->
+                <div class="bg-white rounded-2xl shadow-sm p-5">
+                    <p class="text-sm font-semibold text-gray-700 mb-4">Supported Formats</p>
+                    <div class="grid grid-cols-3 gap-2">
+                        @foreach (var fmt in new[] { ("JPG", "bg-amber-100 text-amber-700"), ("PNG", "bg-blue-100 text-blue-700"), ("GIF", "bg-purple-100 text-purple-700"), ("BMP", "bg-rose-100 text-rose-700"), ("JPEG", "bg-emerald-100 text-emerald-700") })
+                        {
+                            <span class="@fmt.Item2 text-xs font-semibold rounded-lg px-3 py-2 text-center">@fmt.Item1</span>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Uploads Table -->
         @if (Model.UploadedFiles != null && Model.UploadedFiles.Count > 0)
         {
-            <div class="mt-8 bg-white rounded-2xl shadow-xl overflow-hidden">
-                <div class="bg-gray-50 px-8 py-4 border-b border-gray-200">
-                    <h2 class="text-xl font-semibold text-gray-800">Recently Uploaded Files</h2>
+            <div class="mt-6 bg-white rounded-2xl shadow-sm overflow-hidden">
+                <div class="flex items-center justify-between px-7 py-5 border-b border-gray-50">
+                    <h2 class="text-base font-semibold text-gray-700">Recent Uploads</h2>
+                    <span class="text-xs text-gray-400">@Model.UploadedFiles.Count file(s)</span>
                 </div>
-                <div class="px-8 py-6">
-                    <ul class="space-y-3">
-                        @foreach (var file in Model.UploadedFiles)
-                        {
-                            <li class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                                <div class="flex items-center space-x-3">
-                                    <svg class="h-8 w-8 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                <div class="divide-y divide-gray-50">
+                    @foreach (var file in Model.UploadedFiles)
+                    {
+                        <div class="flex items-center justify-between px-7 py-4 hover:bg-gray-50 transition-colors">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                                     </svg>
-                                    <div>
-                                        <p class="text-sm font-medium text-gray-900">@file.Name</p>
-                                        <p class="text-xs text-gray-500">@file.Size bytes</p>
-                                    </div>
                                 </div>
-                                <div class="text-sm text-gray-500">
-                                    @file.UploadedAt.ToString("yyyy-MM-dd HH:mm:ss")
+                                <div>
+                                    <p class="text-sm font-semibold text-gray-700">@file.Name</p>
+                                    <p class="text-xs text-gray-400">@((file.Size / 1024.0).ToString("F1")) KB</p>
                                 </div>
-                            </li>
-                        }
-                    </ul>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="text-xs text-gray-400">@file.UploadedAt.ToString("dd MMM yyyy, HH:mm")</span>
+                                <span class="text-xs bg-emerald-100 text-emerald-700 font-semibold px-3 py-1 rounded-full">Uploaded</span>
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
         }
-    </div>
+
+    </main>
 </div>
+
+<script>
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('UploadedFile');
+    const fileNameDisplay = document.getElementById('fileNameDisplay');
+
+    fileInput.addEventListener('change', () => {
+        if (fileInput.files.length > 0) {
+            fileNameDisplay.textContent = '✅ ' + fileInput.files[0].name;
+            fileNameDisplay.classList.add('text-emerald-600', 'font-medium');
+        }
+    });
+
+    dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+    dropZone.addEventListener('drop', e => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        if (e.dataTransfer.files.length > 0) {
+            fileInput.files = e.dataTransfer.files;
+            fileNameDisplay.textContent = '✅ ' + e.dataTransfer.files[0].name;
+            fileNameDisplay.classList.add('text-emerald-600', 'font-medium');
+        }
+    });
+</script>
+</body>
+</html>
